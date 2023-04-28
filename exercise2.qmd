@@ -1,0 +1,87 @@
+---
+title: "expercise2"
+format: html
+---
+
+
+## Loading Packages & set 1 Plot as default for base-plot
+```{r}
+library("readr") # to import tabular data (e.g. csv)
+library("dplyr") # to manipulate (tabular) data
+library("ggplot2") # to visualize data
+library("sf")
+
+options("sf_max.plot" = 1)
+```
+
+
+## Import wild boar data & convert with to spatial data
+```{r}
+
+wildschwein_BE <- read_delim("datasets/wildschwein_BE_2056.csv", ",")
+
+wildschwein_BE <- st_as_sf(wildschwein_BE, coords = c("E", "N"), crs = 2056, remove = FALSE)
+
+wildschwein_BE
+```
+We need N & E later, so add remove = FALSE to not remove them wehn adding geometry
+
+
+## How many individuals were tracked 
+```{r}
+wildschwein_BE$TierName |> unique()
+```
+
+
+## For how long were the individual tracked? Are there gaps? Were all individuals tracked concurrently or sequentially?
+```{r}
+ggplot(wildschwein_BE, aes(DatetimeUTC, TierName)) +
+  geom_point()
+```
+
+
+## What is the temporal sampling interval between the locations?
+```{r}
+wildschwein_BE <- group_by(wildschwein_BE, TierID)
+
+wildschwein_BE <- mutate(wildschwein_BE, timelag = as.numeric(difftime(lead(DatetimeUTC), DatetimeUTC)))
+
+wildschwein_BE
+
+ggplot(wildschwein_BE, aes(timelag/60)) +
+  geom_histogram(binwidth = 1) +
+  lims(x = c(0, 5000/60)) +
+  scale_y_log10()
+
+wildschwein_BE |> 
+  filter(DatetimeUTC < "2014-08-24") |> 
+  ggplot(aes(DatetimeUTC, timelag, colour = TierName)) +
+  geom_point() + 
+  geom_line()
+```
+
+--> Sampling rate different during day and night
+
+## Task 3 Deriving speed
+
+Euclidian Distance (use dummy values to calculate distance first before using all data)
+```{r}
+N1 <- 1204752
+N2 <- 1204863
+E1 <- 2570409
+E2 <- 2570402
+
+sqrt((E1-E2)^2 + (N1-N2)^2)
+
+```
+--> Formula works, implement it in the data frame
+
+```{r}
+wildschwein_BE <- wildschwein_BE |> 
+  group_by(TierName) |> 
+  mutate(steplength_m = sqrt((E-(lead(E))^2 + (N-lead(N))^2)))
+
+wildschwein_BE <- wildschwein_BE |> 
+  mutate(speed_ms = steplenth_m/timelag)
+```
+
