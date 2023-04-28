@@ -1,17 +1,57 @@
 ---
 title: "expercise2"
+author: "Lukas Bieri (bieriluk)"
+date: "05.01.2023"
 format: html
+editor: source
 ---
+# Exercise 2 -  Computational Movement Analysis: Patterns and Trends in Environmental Data
+
+## 1. Information & Metadata
+
+### 1.1 Ordnerstruktur R-Projekt
+
+The following project was created for the exercise:
+cma-week2-rexercise
+
+Data was stored in the folder "datasets".
+
+### 1.3 Data
+
+Data for the exercise was provided by the teaching staff in the module an provided via the plattform "Moodle". 
+
+The following datasets were used:
+
+1.  File: "wildschwein_BE_2056.csv"
+    Downloaded: 28.04.2023
+    Source: https://moodle.zhaw.ch/pluginfile.php/1168373/mod_folder/content/0/wildschwein_BE_2056.csv?forcedownload=1
 
 
-## Loading Packages & set 1 Plot as default for base-plot
+### 1.4 Used Software
+
+**R version 4.2.1 (2022-06-23 ucrt)** -- "Funny-Looking Kid"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+**RStudio 2023.03.0+386** "Cherry Blossom" Release (3c53477afb13ab959aeb5b34df1f10c237b256c3, 2023-03-09) for Windows
+Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) RStudio/2023.03.0+386 Chrome/108.0.5359.179 Electron/22.0.3 Safari/537.36
+
+**Gitfor WindowsVersion 2.40.1**
+
+
+{{< pagebreak >}}
+
+## 2. Preparation
+
+In Preparation: Restart R and clear console.
+
+Then: Load necessary functions
+
 ```{r}
 library("readr") # to import tabular data (e.g. csv)
 library("dplyr") # to manipulate (tabular) data
 library("ggplot2") # to visualize data
 library("sf")
-
-options("sf_max.plot" = 1)
 ```
 
 
