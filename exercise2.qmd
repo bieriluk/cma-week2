@@ -21,6 +21,7 @@ editor: source
 
 **Authors:** Lukas Bieri (bieriluk)
 
+
 ### 1.1 Structure R-Project
 
 The following project was created for the exercise:
@@ -30,6 +31,7 @@ Data was stored in the folder "datasets".
 
 Code and explanations in this Quarto-File where stored and submitted via the public GitHub Repo "bieriluk/cma-week2":
 https://github.com/bieriluk/cma-week2.git
+
 
 ### 1.2 Data
 
@@ -49,6 +51,7 @@ https://computationalmovementanalysis.github.io/FS23/
 
 These R Exercises are created by Patrick Laube, Nils Ratnaweera, Nikolaos Bakogiannis and Dominic Lüönd for the Course Computational Movement Analysis and are licensed under Creative Commons Attribution 4.0 International License.
 
+
 ### 1.4 Used Software
 
 **R version 4.2.1 (2022-06-23 ucrt)** -- "Funny-Looking Kid"
@@ -61,9 +64,9 @@ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)
 **Gitfor WindowsVersion 2.40.1**
 
 
-{{< pagebreak >}}
+## 2. Task 1: Import your data
 
-## 2. Preparation
+### 2.1 Preparation
 
 In Preparation: Restart R and clear console.
 
@@ -77,7 +80,7 @@ library("sf")
 ```
 
 
-## Import wild boar data & convert with to spatial data
+### 2.2 Import wild boar data & convert with to spatial data
 ```{r}
 
 wildschwein_BE <- read_delim("datasets/wildschwein_BE_2056.csv", ",")
@@ -89,20 +92,25 @@ wildschwein_BE
 We need N & E later, so add remove = FALSE to not remove them wehn adding geometry
 
 
-## How many individuals were tracked 
+## 3. Task 2: Getting an overview
+
+### 3.1 How many individuals were tracked 
 ```{r}
 wildschwein_BE$TierName |> unique()
 ```
+--> 3 Individuals, Sabi, Ruth and Rosa
 
-
-## For how long were the individual tracked? Are there gaps? Were all individuals tracked concurrently or sequentially?
+### 3.2 For how long were the individual tracked? Are there gaps? Were all individuals tracked concurrently or sequentially?
 ```{r}
 ggplot(wildschwein_BE, aes(DatetimeUTC, TierName)) +
   geom_point()
+
+head(wildschwein_BE)
+tail(wildschwein_BE)
 ```
+The time of tracking differs between the individuals. The time frame is between End of August 2014
 
-
-## What is the temporal sampling interval between the locations?
+### 3.3 What is the temporal sampling interval between the locations?
 ```{r}
 wildschwein_BE <- group_by(wildschwein_BE, TierID)
 
@@ -124,9 +132,12 @@ wildschwein_BE |>
 
 --> Sampling rate different during day and night
 
-## Task 3 Deriving speed
 
-Euclidian Distance (use dummy values to calculate distance first before using all data)
+## 4. Task 3: Deriving movement parameters I: Speed
+
+### 4.1 Calculate Euclidian Distance
+
+Calculate Euclidian Distance by useing dummy values from the data set first before using all data
 ```{r}
 N1 <- 1204752
 N2 <- 1204863
@@ -146,4 +157,20 @@ wildschwein_BE <- wildschwein_BE |>
 wildschwein_BE <- wildschwein_BE |> 
   mutate(speed_ms = steplenth_m/timelag)
 ```
+
+
+## 5. Task 4: Cross-scale movement analysis
+
+
+## 6. Task 5 (optional): Deriving movement parameters II: Rolling window functions
+
+
+## 7. Task 6: Add your movement data to your repository
+
+
+## 8. Task 7: Explore your movement data
+
+
+## 9. Submission
+
 
