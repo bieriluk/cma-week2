@@ -9,23 +9,45 @@ editor: source
 
 ## 1. Information & Metadata
 
-### 1.1 Ordnerstruktur R-Projekt
+### 1.1 Information
+
+**Study program:** MSc in Environment and Natural Resources FS23
+
+**Module:** Computational Movement Analysis: Patterns and Trends in Environmental Data
+
+**Course:** R Exercise 2 - Week 2
+
+**Lecturers:** Patrick Laube (laup), Nils Ratnaweera (rata) & Dominic Lüönd (luoe)
+
+**Authors:** Lukas Bieri (bieriluk)
+
+### 1.1 Structure R-Project
 
 The following project was created for the exercise:
 cma-week2-rexercise
 
 Data was stored in the folder "datasets".
 
-### 1.3 Data
+Code and explanations in this Quarto-File where stored and submitted via the public GitHub Repo "bieriluk/cma-week2":
+https://github.com/bieriluk/cma-week2.git
 
-Data for the exercise was provided by the teaching staff in the module an provided via the plattform "Moodle". 
+### 1.2 Data
+
+Data for the exercise was provided by the teaching staff via the plattform "Moodle". 
+
+The data originates from the ZHAW Research Projekt "Using an acoustic signal to prevent wild boars from damaging crops"
+https://www.zhaw.ch/en/about-us/news/news-releases/news-detail/event-news/using-an-acoustic-signal-to-prevent-wild-boars-from-damaging-crops/
 
 The following datasets were used:
 
 1.  File: "wildschwein_BE_2056.csv"
     Downloaded: 28.04.2023
     Source: https://moodle.zhaw.ch/pluginfile.php/1168373/mod_folder/content/0/wildschwein_BE_2056.csv?forcedownload=1
+    
+Information on the R Exercise can be found here:
+https://computationalmovementanalysis.github.io/FS23/
 
+These R Exercises are created by Patrick Laube, Nils Ratnaweera, Nikolaos Bakogiannis and Dominic Lüönd for the Course Computational Movement Analysis and are licensed under Creative Commons Attribution 4.0 International License.
 
 ### 1.4 Used Software
 
