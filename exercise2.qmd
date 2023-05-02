@@ -345,7 +345,7 @@ ggplot() +
 
 
 ## 7. Task 6: Add your movement data to your repository
-
+Added to folder dataset and setup for github.
 
 ## 8. Task 7: Explore your movement data
 
