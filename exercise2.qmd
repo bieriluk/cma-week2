@@ -368,6 +368,13 @@ Visualize it:
 ```{r}
 ggplot(mydata) +
   geom_sf()
+
+library("tmap")
+tmap_mode(mode = "view")
+
+tm_shape(mydata) +
+  tm_dots()
+  tm_basemap("Esri.WorldImagery")
 ```
 
 ## 9. Submission
