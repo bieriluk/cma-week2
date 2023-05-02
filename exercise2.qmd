@@ -182,6 +182,120 @@ Calculate the speed by dividing distance traveled (steplenth) with time between 
 
 ## 5. Task 4: Cross-scale movement analysis
 
+Import the caro dataset & make it into spatial data frame:
+```{r}
+caro <- read_delim("datasets/caro60.csv", ",")
+
+caro <- st_as_sf(caro, coords = c("E", "N"), crs = 2056, remove = FALSE)
+
+caro
+```
+
+Reduce the granularity of sampling interval by selecting every 3rd, 6th and 9th position:
+```{r}
+caro_3 <- slice(caro, seq(from = 1, to = 200, by = 3))
+caro_3
+
+caro_6 <- slice(caro, seq(from = 1, to = 200, by = 6))
+caro_6
+
+caro_9 <- slice(caro, seq(from = 1, to = 200, by = 9))
+caro_9
+
+nrow(caro)
+nrow(caro_3)
+nrow(caro_6)
+nrow(caro_9)
+```
+
+
+Calculate timelag, steplength and speed for these data sets:
+```{r}
+caro <- caro |> 
+  group_by(TierName) |> 
+  mutate(timelag = as.numeric(difftime(lead(DatetimeUTC), DatetimeUTC)*60)) |> 
+  mutate(steplength_m = sqrt((E-lead(E,1))^2 + (N-lead(N,1))^2)) |> 
+  mutate(speed_ms = steplength_m/timelag)
+caro
+
+caro_3 <- caro_3 |> 
+  group_by(TierName) |> 
+  mutate(timelag = as.numeric(difftime(lead(DatetimeUTC), DatetimeUTC)*60)) |> 
+  mutate(steplength_m = sqrt((E-lead(E,1))^2 + (N-lead(N,1))^2)) |> 
+  mutate(speed_ms = steplength_m/timelag)
+caro_3
+
+caro_6 <- caro_6 |> 
+  group_by(TierName) |> 
+  mutate(timelag = as.numeric(difftime(lead(DatetimeUTC), DatetimeUTC)*60)) |> 
+  mutate(steplength_m = sqrt((E-lead(E,1))^2 + (N-lead(N,1))^2)) |> 
+  mutate(speed_ms = steplength_m/timelag)
+caro_6
+
+caro_9 <- caro_9 |> 
+  group_by(TierName) |> 
+  mutate(timelag = as.numeric(difftime(lead(DatetimeUTC), DatetimeUTC)*60)) |> 
+  mutate(steplength_m = sqrt((E-lead(E,1))^2 + (N-lead(N,1))^2)) |> 
+  mutate(speed_ms = steplength_m/timelag)
+caro_9
+```
+
+Visualize the resampled data sets speed:
+```{r}
+ggplot() +
+  geom_line(data = caro, aes(x = DatetimeUTC, y = speed_ms, color = "1min")) +
+  geom_line(data = caro_3, aes(x = DatetimeUTC, y = speed_ms, color = "3min")) +
+  geom_line(data = caro_6, aes(x = DatetimeUTC, y = speed_ms, color = "6min")) +
+  geom_line(data = caro_9, aes(x = DatetimeUTC, y = speed_ms, color = "9min")) +
+  labs(
+    x = "time (UTC)",
+    y = "speed in m/s", 
+    title = "Comparing derived speed at diferent sampling intervals",
+    color = "sampling rate"
+    )
+```
+The speed is higher, the lower the sampling rate. What sampling rate is appropriate will depend on the research question to be answered.
+
+Visualize the resampled data sets trajectories
+```{r}
+ggplot() +
+  geom_point(data = caro, aes(x = E, y = N, color = "1min")) +
+  geom_point(data = caro_3, aes(x = E, y = N, color = "3min")) +
+  geom_path(data = caro, aes(x = E, y = N, color = "1min")) +
+  geom_path(data = caro_3, aes(x = E, y = N, color = "3min")) +
+  labs(
+    x = "E",
+    y = "N", 
+    title = "Comparing original data with 3 minutes resampled data",
+    color = "trajectory"
+    )
+
+ggplot() +
+  geom_point(data = caro, aes(x = E, y = N, color = "1min")) +
+  geom_point(data = caro_6, aes(x = E, y = N, color = "6min")) +
+  geom_path(data = caro, aes(x = E, y = N, color = "1min")) +
+  geom_path(data = caro_6, aes(x = E, y = N, color = "6min")) +
+  labs(
+    x = "E",
+    y = "N", 
+    title = "Comparing original data with 6 minutes resampled data",
+    color = "trajectory"
+    )
+
+ggplot() +
+  geom_point(data = caro, aes(x = E, y = N, color = "1min")) +
+  geom_point(data = caro_9, aes(x = E, y = N, color = "9min")) +
+  geom_path(data = caro, aes(x = E, y = N, color = "1min")) +
+  geom_path(data = caro_9, aes(x = E, y = N, color = "9min")) +
+  labs(
+    x = "E",
+    y = "N", 
+    title = "Comparing original data with 9 minutes resampled data",
+    color = "trajectory"
+    )
+```
+Resampled data at 3min and 6min intervalls still show the trajetories more or less accurate in themes of where the animal went. At 9 minutes of resampling, the trajectories still show all the places where the animal spent a lot of time but loses large movements that where quicker.
+
 
 ## 6. Task 5 (optional): Deriving movement parameters II: Rolling window functions
 
