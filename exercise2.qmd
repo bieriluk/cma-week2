@@ -298,6 +298,50 @@ Resampled data at 3min and 6min intervalls still show the trajetories more or le
 
 
 ## 6. Task 5 (optional): Deriving movement parameters II: Rolling window functions
+Install & load the additional library "zoo":
+```{r}
+#install.packages("zoo")
+library("zoo")
+```
+
+Try out the "rollmean" function in dummy data:
+```{r}
+example <- rnorm(10)
+example
+rollmean(example, k = 3, fill = NA, align = "left")
+rollmean(example, k = 4, fill = NA, align = "left")
+```
+
+Use the "rollmean" function on the "caro" dataset and visualize:
+```{r}
+caro_3_smooth <- caro |> 
+  group_by(TierName) |> 
+  mutate(speed_ms = rollmean(caro$speed_ms, k = 3, fill = NA, align = "left"))
+caro_3_smooth
+
+caro_6_smooth <- caro |> 
+  group_by(TierName) |> 
+  mutate(speed_ms = rollmean(caro$speed_ms, k = 6, fill = NA, align = "left"))
+caro_6_smooth
+
+caro_9_smooth <- caro |> 
+  group_by(TierName) |> 
+  mutate(speed_ms = rollmean(caro$speed_ms, k = 6, fill = NA, align = "left"))
+caro_9_smooth
+
+ggplot() +
+  geom_line(data = caro, aes(x = DatetimeUTC, y = speed_ms, color = "1min")) +
+  geom_line(data = caro_3_smooth, aes(x = DatetimeUTC, y = speed_ms, color = "3min")) +
+  geom_line(data = caro_6_smooth, aes(x = DatetimeUTC, y = speed_ms, color = "6min")) +
+  geom_line(data = caro_9_smooth, aes(x = DatetimeUTC, y = speed_ms, color = "9min")) +
+  labs(
+    x = "time (UTC)",
+    y = "speed in m/s", 
+    title = "Comparing derived speed at diferent moving window sizes",
+    color = "Average over x minutes"
+    )
+
+```
 
 
 ## 7. Task 6: Add your movement data to your repository
