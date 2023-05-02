@@ -348,7 +348,27 @@ ggplot() +
 Added to folder dataset and setup for github.
 
 ## 8. Task 7: Explore your movement data
+Import movement data:
+### 2.2 Import wild boar data & convert with to spatial data
+```{r}
+mydata <- read_delim("datasets/posmo_2023-01-01_2023-05-02.csv", ",")
+mydata
 
+mydata <- st_as_sf(mydata, coords = c("lon_x", "lat_y"), crs = 4326, remove = TRUE)
+mydata
+```
+
+Converte to CH1903+ LV95:
+```{r}
+mydata <- st_transform(mydata, 2056)
+mydata
+```
+
+Visualize it:
+```{r}
+ggplot(mydata) +
+  geom_sf()
+```
 
 ## 9. Submission
 
