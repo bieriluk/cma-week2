@@ -108,7 +108,8 @@ ggplot(wildschwein_BE, aes(DatetimeUTC, TierName)) +
 head(wildschwein_BE)
 tail(wildschwein_BE)
 ```
-The time of tracking differs between the individuals. The time frame is between End of August 2014
+The time of tracking differs between the individuals, the overlap for the most part, whereas tracking of "Sabi" starte much earlier than "Rosa" and "Ruth" and the tracking of "Rosa" ended earlier than "Ruth and "Sabi". The time frame overall is between End of August 2014 till the End of July 2015.
+No relevant / longer gaps acc. to a quick plot.
 
 ### 3.3 What is the temporal sampling interval between the locations?
 ```{r}
@@ -117,6 +118,11 @@ wildschwein_BE <- group_by(wildschwein_BE, TierID)
 wildschwein_BE <- mutate(wildschwein_BE, timelag = as.numeric(difftime(lead(DatetimeUTC), DatetimeUTC)))
 
 wildschwein_BE
+tail(wildschwein_BE)
+mean(wildschwein_BE$timelag, na.rm = TRUE)
+median(wildschwein_BE$timelag, na.rm = TRUE)
+min(wildschwein_BE$timelag, na.rm = TRUE)
+max(wildschwein_BE$timelag, na.rm = TRUE)
 
 ggplot(wildschwein_BE, aes(timelag/60)) +
   geom_histogram(binwidth = 1) +
@@ -124,13 +130,17 @@ ggplot(wildschwein_BE, aes(timelag/60)) +
   scale_y_log10()
 
 wildschwein_BE |> 
-  filter(DatetimeUTC < "2014-08-24") |> 
+  filter(DatetimeUTC > "2014-08-28" & DatetimeUTC < "2014-08-30") |> 
   ggplot(aes(DatetimeUTC, timelag, colour = TierName)) +
   geom_point() + 
   geom_line()
 ```
 
---> Sampling rate different during day and night
+The time between samples is mostly around 900s or 15min (median = 903s), however this an vary in both directions (min = 12s, max = 60367s) but a good number of timelags are significantly longer (mean = 1407.72s).
+
+The histogram shows groups of sampling regimes, so the sampling device was most likely set to sample every 5min, 15min, 30min, 45min, 60min and 75min depending on certain parameters.
+
+If we look at individual days, we see that the sampling rate is different during day and night, possibly set this way due the boars beeing hidden during the day and come out during the night.
 
 
 ## 4. Task 3: Deriving movement parameters I: Speed
